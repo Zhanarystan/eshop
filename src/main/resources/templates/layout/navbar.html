@@ -1,0 +1,36 @@
+
+<nav class="navbar" style="background: #162f72;" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{'/'}" style="color: white;">E-SHOP</a>
+        </li>
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border: none;" th:text="#{button.language}"></button>
+        <div class="dropdown-menu">
+            <a class="nav-link" href="?lng=ru">RUS</a>
+            <a class="nav-link" href="?lng=en">ENG</a>
+            <a class="nav-link" href="?lng=kz">KAZ</a>
+        </div>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+            <a class="nav-link" th:href="@{'/login'}" style="color: white;" th:text="#{label.login}"></a>
+        </li>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+            <a class="nav-link" th:href="@{'/registration'}" style="color: white;" th:text="#{label.registration}"></a>
+        </li>
+        <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')" >
+            <a class="nav-link" th:href="@{'/admin'}" style="color: white;" th:text="#{label.management}"></a>
+        </li>
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+            <a class="nav-link" th:href="@{'/profile'}" style="color: white;" th:text="${currentUser.fullName}"></a>
+        </li>
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+            <a class="nav-link" href="JavaScript:void(0)" onclick="document.getElementById('logoutFormId').submit()"  style="color: white;" th:text="#{label.logout}"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{'/basket'}" style="color: white;"><p style="display: inline;" th:text="#{label.basket}"></p>
+                <p style="display:inline;" th:text="'('+${totalAmount}+')'" th:if="${totalAmount>0}"></p></a>
+
+        </li>
+        <form th:action="@{'/logout'}" method="post" id="logoutFormId" sec:authorize="isAuthenticated()">
+        </form>
+    </ul>
+</nav>

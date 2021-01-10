@@ -1,0 +1,105 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/main.html" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div layout:fragment="site_content">
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-4" style="width: 800px;">
+            <label class="sr-only">Search</label>
+            <input type="text" class="form-control" placeholder="Enter to search" style="width: 800px;">
+        </div>
+        <button type="submit" class="btn btn-primary mb-4" th:text="#{label.search}"></button>
+    </form>
+    <div class="card" style="width: 920px;">
+        <img th:src="@{'/viewphoto/'+${item.getLargePicURL()}}" class="d-block w-100" alt="..." style="height: 400px;">
+        <div class="card-body">
+            <h6 th:text="${item.getName()}"></h6>
+            <h6 th:text="${item.getPrice()+'$'}"></h6>
+            <p class="card-text" th:text="${item.getDescription()}"></p>
+        </div>
+        <br><br>
+        <div th:if="${!pictures.isEmpty()}">
+        <h3 style="text-align: center;" th:text="#{label.screenshots}"></h3>
+
+        <div style="width: 400px; margin-left: auto; margin-right: auto;">
+            <img th:src="@{'/viewphoto/'+${pictures.get(randpic).getUrl()}}" class="card-img-top" style="width: 100%; height: 450px;">
+        </div>
+                    <div class="row row-cols-1 row-cols-md-2" style="margin-top: 10px;">
+                        <div class="col-md-2" style="margin-bottom: 10px;" th:each="pic: ${pictures}">
+                            <img th:src="@{'/viewphoto/'+${pic.getUrl()}}" class="card-img-top" style="width: 100px; height: 100px;">
+                        </div>
+                    </div>
+        </div>
+        <div class="card-footer">
+            <i class="fas fa-star" th:each="i : ${#numbers.sequence(1,item.getFullStars())}" th:if="${item.getFullStars()>0}" style="color: #e07b39"></i>
+            <i class="fas fa-star-half" th:each="i : ${#numbers.sequence(1,item.getHalfStars())}" th:if="${item.getHalfStars()>0}" style="color: #e07b39"></i>
+            <i class="far fa-star" th:each="i : ${#numbers.sequence(1,item.getEmptyStars())}" th:if="${item.getEmptyStars()>0}" style="color: #e07b39"></i>
+        </div>
+    </div>
+    <form th:action="@{'/add_to_basket'}" method="post" style="margin-top: 10px;">
+        <input type="hidden" name="item_id" th:value="${item.getId()}">
+        <div class="form-group">
+            <button class="btn btn-success btn-sm" type="submit" th:text="#{label.add_to_basket}"></button>
+        </div>
+    </form>
+
+    <div style="width: 920px;">
+    <form method="post" th:action="@{'/add-comment'}" style="margin-top: 20px;" sec:authorize="isAuthenticated()">
+        <div class="form-group">
+            <input type="hidden" name="user_id" th:value="${currentUser.getId()}">
+            <input type="hidden" name="item_id" th:value="${item.getId()}">
+            <label th:text="#{label.comments}"></label>
+            <textarea class="form-control" name="comment"></textarea>
+        </div>
+        <div>
+            <button class="btn btn-primary float-right" th:text="#{label.add_comment}" type="submit"></button>
+        </div>
+    </form>
+        <br><br><br>
+    <div class="card" style="width: 100%; margin-top:10px;" th:if="${comments!=null}">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" th:each="c : ${comments}">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h5 th:text="${c.getAuthor().getFullName()}"></h5>
+                        <p th:text="${c.getComment()}"></p>
+                    </div>
+                    <div class="col-md-3">
+                        <p th:text="${dateFormat.format(c.getAddedDate())}"></p>
+                        <div class="row" th:if="${currentUser!=null and c.getAuthor().getId()==currentUser.getId()}" style="margin-left: 30px;">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" th:attr="data-target='#editData'+${c.getId()}"><i class="material-icons" style="color: #162f72">create</i></button>
+                            <form method="post" th:action="@{'/delete-comment'}">
+                                <input type="hidden" name="item_id" th:value="${item.getId()}">
+                                <input type="hidden" name="comment_id" th:value="${c.getId()}">
+                                <button type="submit" class="btn btn-danger"><i class="material-icons" style="color: #162f72">delete</i></button>
+                            </form>
+                            <div class="modal fade" th:id="editData+${c.getId()}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form th:action="@{'/edit-comment'}" method="post">
+                                            <div class="modal-body">
+                                                <input type="hidden" name="item_id" th:value="${item.getId()}">
+                                                <input type="hidden" name="comment_id" th:value="${c.getId()}">
+                                                <label th:text="#{label.add_comment}"></label>
+                                                <textarea class="form-control" name="comment" th:text="${c.getComment()}"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    </div>
+</div>
+</html>

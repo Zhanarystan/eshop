@@ -1,0 +1,121 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{'/add'}" method="post">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" class="form-control" name="item_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea class="form-control" name="item_description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Item price($):</label>
+                        <input type="text" class="form-control" name="item_price">
+                    </div>
+                    <div class="form-group">
+                        <label>Item rating (from 1 to 5):</label>
+                        <input type="text" class="form-control" name="item_stars">
+                    </div>
+                    <div class="form-group">
+                        <label>Item small picture URL:</label>
+                        <input type="text" class="form-control" name="item_small_picture_url">
+                    </div>
+                    <div class="form-group">
+                        <label>Item large picture URL:</label>
+                        <input type="text" class="form-control" name="item_large_picture_url">
+                    </div>
+                    <div class="form-group">
+                        <label>In top page:</label>
+                        <select class="form-control" name="item_in_top_page">
+                            <option value="true">YES</option>
+                            <option value="false">NO</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Brand:</label>
+                        <select class="form-control" name="item_brand_id">
+                            <option th:each="b : ${brands}" th:text="${b.getName()}" th:value="${b.getId()}"></option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel11">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{'/addbrand'}" method="post">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" class="form-control" name="brand_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Country:</label>
+                        <select class="form-control" name="brand_country_id">
+                            <option th:each="country : ${countries}" th:text="${country.getName()} + '/' + ${country.getCode()}" th:value="${country.getId()}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add brand</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{'/addcountry'}" method="post">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" class="form-control" name="country_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Code:</label>
+                        <input type="text" class="form-control" name="country_code">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add country</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

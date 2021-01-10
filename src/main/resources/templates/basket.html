@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/main.html">
+<div layout:fragment="site_content">
+    <div class="card">
+        <div class="card-header">
+            <h2 th:text="#{label.basket}"></h2>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th th:text="#{label.product_items}"></th>
+                    <th th:text="#{label.price}"></th>
+                    <th th:text="#{label.amount}"></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item: ${basket}">
+                    <td th:text="${item.getItemName()}"></td>
+                    <td th:text="${item.getItemPrice()+'$'}"></td>
+                    <td th:text="${item.getAmount()}"></td>
+                    <td>
+                        <div class="row">
+                        <form th:action="@{'/add_to_basket'}" method="post">
+                            <input type="hidden" name="item_id" th:value="${item.getItem_id()}">
+                            <button class="btn btn-success" style="text-align: center;" type="submit">+</button>
+                        </form>
+                        <form th:action="@{'/remove_from_basket'}" method="post">
+                            <input type="hidden" name="item_id" th:value="${item.getItem_id()}">
+                            <button class="btn btn-danger" style="text-align: center;" type="submit">-</button>
+                        </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${basket.size()>0}">
+                    <td colspan="2">
+                        <h5 th:text="'TOTAL: '+${totalPrice}+'$'"></h5>
+                    </td>
+                    <td colspan="2">
+                        <div class="row">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            CHECK IN
+                        </button>
+                        <form method="post" th:action="@{'/clear_basket'}">
+                            <input name="in" value="in" type="hidden">
+                            <button class="btn btn-danger" type="submit">CLEAR BASKET</button>
+                        </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="@{'/pay'}" method="post">
+                        <div class="modal-body" style="width: 90%; margin-right: auto; margin-left: auto;">
+
+                                <div class="row">
+                                    <label>Full name</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="row">
+                                    <label>Card number</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Expiration (MM/YY)</label>
+                                        <input type="text" class="form-control" >
+                                    </div>
+                                    <div class="col">
+                                        <label>CVV</label>
+                                        <input type="text" class="form-control" >
+                                    </div>
+                                </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" type="submit">Pay</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

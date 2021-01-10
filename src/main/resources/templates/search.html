@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/main.html">
+<div layout:fragment="site_content">
+    <form action="/searching" method="get">
+        <div class="form-row">
+            <div class="col-5">
+                <label>Name:</label>
+                <input name="search_item_name" type="text" class="form-control" th:value="${name}">
+            </div>
+            <div class="col-2">
+                <label>Brand:</label>
+                <select name="brandname" class="form-control">
+                    <option></option>
+                    <option th:each="b : ${brands}" th:text="${b.getName()}" th:value="${b.getName()}" th:selected="${b.getName()==brand}"></option>
+                </select>
+            </div>
+            <div class="col-2">
+                <label>Price From:</label>
+                <input name="search_item_price_from" nametype="text" class="form-control">
+            </div>
+            <div class="col-2">
+                <label>Price To:</label>
+                <input name="search_item_price_to" type="text" class="form-control">
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" type="submit" style="margin-top: 35px; ">SEARCH</button>
+            </div>
+        </div>
+        <div class="form-row" style="margin-top: 5px;">
+            <div class="col-4 offset-6">
+                <label>Order by price:</label>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="order" id="option2" value="asc"> Ascending
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="order" id="option3" value="desc"> Descending
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+
+        <br>
+        <h3>Search Results:</h3>
+        <div class="row row-cols-1 row-cols-md-2" style="margin-top: 10px;">
+            <div class="col-md-4" style="margin-bottom: 10px;" th:each="item: ${items}">
+                <div class="card" style="width: 250px; height: 450px;">
+                    <img th:src="@{'/viewphoto/'+${item.getSmallPicURL()}}" class="card-img-top" style="width: 250px; height: 200px;">
+                    <div class="card-body">
+                        <h6 class="card-title"><a th:href="@{'/item/' + ${item.getId()}}" th:text="${item.getName()}"></a></h6>
+                        <h6 class="card-title" th:text="${item.getPrice()+'$'}"></h6>
+                        <p class="card-text" th:text="${item.getDescription()}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <a th:href="@{'/search?brandname=' + ${item.getBrand().getName()}}" th:text="${item.getBrand().getName()}+', '+${item.getBrand().getCountry().getCode()}"></a>
+                    </div>
+                    <div class="card-footer">
+                        <i class="fas fa-star" th:each="i : ${#numbers.sequence(1,item.getFullStars())}" th:if="${item.getFullStars()>0}" style="color: #e07b39"></i>
+                        <i class="fas fa-star-half" th:each="i : ${#numbers.sequence(1,item.getHalfStars())}" th:if="${item.getHalfStars()>0}" style="color: #e07b39"></i>
+                       <i class="far fa-star" th:each="i : ${#numbers.sequence(1,item.getEmptyStars())}" th:if="${item.getEmptyStars()>0}" style="color: #e07b39"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</html>

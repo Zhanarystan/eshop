@@ -1,0 +1,105 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/admin.html">
+<div layout:fragment="admin_content">
+
+    <div class="row">
+        <div class="col-md-9">
+            <h2 th:text="#{label.all_items}"></h2>
+        </div>
+        <div class="col-md-3">
+            <button type="button" style="background: darkslategrey;" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                ADD NEW
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>NAME</td>
+                    <td>BRAND</td>
+                    <td>PRICE</td>
+                    <td>DETAILS</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item: ${items}">
+                    <td th:text="${item.getId()}"></td>
+                    <td th:text="${item.getName()}"></td>
+                    <td th:text="${item.getBrand().getName()}"></td>
+                    <td th:text="${item.getPrice()+'$'}"></td>
+                    <td><a th:href="@{'/edit-item/'+${item.getId()}}"><button class="btn btn-primary" style="background: darkslategrey;"><i class="material-icons">error_outline</i></button></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/add'}" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" class="form-control" name="item_name">
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea class="form-control" name="item_description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Item price($):</label>
+                            <input type="text" class="form-control" name="item_price">
+                        </div>
+                        <div class="form-group">
+                            <label>Item rating (from 1 to 5):</label>
+                            <input type="text" class="form-control" name="item_stars">
+                        </div>
+                        <div class="form-group">
+                            <label>Item small picture URL:</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile" name="item_small_picture_url">
+                                <label class="custom-file-label" for="customFile" th:text="#{button.choose_file}"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Item large picture URL:</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile1" name="item_large_picture_url">
+                                <label class="custom-file-label" for="customFile" th:text="#{button.choose_file}"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>In top page:</label>
+                            <select class="form-control" name="item_in_top_page">
+                                <option value="true">YES</option>
+                                <option value="false">NO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Brand:</label>
+                            <select class="form-control" name="item_brand_id">
+                                <option th:each="b : ${brands}" th:text="${b.getName()}" th:value="${b.getId()}"></option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

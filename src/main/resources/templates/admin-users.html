@@ -1,0 +1,73 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/admin.html">
+<div layout:fragment="admin_content">
+
+    <div class="row">
+        <div class="col-md-9">
+            <h2 th:text="#{label.users}"></h2>
+        </div>
+        <div class="col-md-3">
+            <button type="button" style="background: darkslategrey;" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                ADD NEW
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>EMAIL</td>
+                <td>FULL NAME</td>
+                <td>ROLES</td>
+                <td>DETAILS</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user: ${users}">
+                <td th:text="${user.getId()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td th:text="${user.getFullName()}"></td>
+                <td><p th:each="role:${user.getRoles()}" th:text="${role.getRole()}"></p></td>
+                <td><a th:href="@{'/edit-user/'+${user.getId()}}"><button class="btn btn-primary" style="background: darkslategrey;"><i class="material-icons">error_outline</i></button></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/adduser'}" method="post">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>EMAIL:</label>
+                            <input type="email" class="form-control" name="user_email">
+                        </div>
+                        <div class="form-group">
+                            <label>Password:</label>
+                            <input class="form-control" name="user_password" type="password">
+                        </div>
+                        <div class="form-group">
+                            <label>User fullname:</label>
+                            <input type="text" class="form-control" name="user_full_name">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

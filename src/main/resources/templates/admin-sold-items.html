@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/admin.html">
+<div layout:fragment="admin_content">
+    <div class="row">
+        <div class="col-md-9">
+            <h2>Sold Items</h2>
+        </div>
+
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>NAME</td>
+                <td>PRICE</td>
+                <td>AMOUNT</td>
+                <td>SOLD DATE</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item: ${items}">
+                <td th:text="${item.getItemName()}"></td>
+                <td th:text="${item.getItemPrice()+'$'}"></td>
+                <td th:text="${item.getAmount()}"></td>
+                <td th:text="${item.getSoldDate()}"></td>
+                <td><a th:href="@{'/edit-item/'+${item.getId()}}"><button class="btn btn-primary" style="background: darkslategrey;"><i class="material-icons">error_outline</i></button></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>
